@@ -28,6 +28,15 @@ CC News has 2,087 sources with fewer than 16 queries and a median bag size of si
 
 The initial model in every domain is `EleutherAI/gpt-neo-125m`. Fine-tuning uses Adam, learning rate 5e-5, batch size eight, betas (0.9, 0.999), epsilon 1e-8, and zero weight decay. There are 200 warmup updates followed by linear decay over ten epochs. Documents are not packed; gradient accumulation and clipping are not used. Training uses bfloat16 autocast and float32 optimizer state.
 
+| Domain | Training seed |
+|---|---:|
+| Reddit | 20260914 |
+| CC News | 171470688381003029 |
+| Enron | 7129716279750356844 |
+| Chromium | 20260914 |
+
+Each training seed initializes Python and PyTorch CPU/CUDA random states and a separate PyTorch generator for shuffling training documents. NumPy uses the seed modulo `2**32`. These training seeds are distinct from the audit source-role partitions; the exact 500 partitions per domain are supplied in `null_order`.
+
 The updated checkpoint is the epoch endpoint with minimum validation token-average negative log-likelihood, breaking ties in favor of the earlier endpoint. Validation uses held-out documents from participating sources.
 
 | Domain | Training documents/epoch | Prediction tokens/epoch | Validation documents | Checkpoint epoch | Updates |

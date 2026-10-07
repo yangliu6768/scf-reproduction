@@ -18,7 +18,7 @@ python reproduce.py
 To run one domain:
 
 ```sh
-python reproduce.py --domain enron
+python reproduce.py --domain enron --output results/enron
 ```
 
 To check the numerical routines:
@@ -40,7 +40,7 @@ Every method uses the same document scores, query bags, and test sources. The do
 
 There are 500 source-role partitions per domain. Training membership, model weights, query documents, and their scores remain fixed. Within each partition, the first K null sources fit the reference map, the next L calibrate SCF, and the remaining null sources join all participating sources in the test panel. Raw-score baselines use all K+L controls for calibration.
 
-Mean, Max, and Min aggregate the raw scores. The RaMIA-style statistic averages the largest `max(1, floor(0.75*m))` scores in a bag of size m. For SCF, each reference source receives equal total weight. With N reference documents, the smoothed tail is
+Mean, Max, and Min aggregate the raw scores. The [RaMIA-style](https://arxiv.org/abs/2408.05131) statistic averages the largest `max(1, floor(0.75*m))` scores in a bag of size m; we apply this aggregation rule to the shared document scores. For SCF, each reference source receives equal total weight. With N reference documents, the smoothed tail is
 
 $$
 \widehat Q(s)=\frac{1+\frac{N}{K}\sum_{v=1}^{K}\frac{1}{m_v}\sum_{j=1}^{m_v}\mathbf 1\{S_{vj}\ge s\}}{N+1}.

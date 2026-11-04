@@ -98,6 +98,8 @@ def fit(domain, prepared, output, model_path=None, device_name="cuda"):
     destination = output / domain
     destination.mkdir(parents=True, exist_ok=False)
     seed = config["seed"]
+    # Fixed seeds preserve RNG choices, but BF16 training need not be bitwise
+    # identical across GPU models or software stacks; scores and metrics may vary.
     random.seed(seed)
     np.random.seed(seed % 2**32)
     torch.manual_seed(seed)

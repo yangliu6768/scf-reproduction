@@ -23,6 +23,8 @@ The supplied `scores/` files contain the original document scores. This route re
 
 The original calculation uses Linux, Python 3.11, PyTorch 2.4.1 with CUDA 12.1, Transformers 4.51.3, and an NVIDIA A100 GPU. Parameters and optimizer state use float32; forward calculations use bfloat16 autocast. A different GPU or software stack may change numerical results.
 
+Fixed seeds control random choices but do not guarantee bitwise-identical training across hardware or software environments. Retraining may therefore change document scores and AUROC/TPR/FPR. `verify.py` checks agreement at the paper's printed precision: a mismatch after retraining should be assessed by its magnitude and effect on the method comparisons. The supplied-score route is the reference for reproducing the printed tables exactly.
+
 ```bash
 set -e
 python3.11 -m venv .venv-gpu

@@ -1,4 +1,8 @@
-"""Check reproduced tables against the values printed in the paper."""
+"""Check exact agreement at the paper's displayed precision.
+
+Retraining can change scores through hardware-dependent floating-point arithmetic;
+a mismatch here reports numerical differences, not necessarily an implementation bug.
+"""
 
 import argparse
 import csv

@@ -2,13 +2,15 @@
 
 Code for **Source-balanced Capped Fisher: Bounded Evidence Aggregation for User Inference in Language Models**, by Yang Liu, Ran Zou, and Wanrong Zhu.
 
-This repository reproduces the main four-domain experiment: Tables 1–3 and Figure 3, together with the paired comparisons and cap ablation in Appendix C. It includes public-data retrieval, text processing, fixed document splits, GPT-Neo fine-tuning, document scoring, SCF, and the comparator aggregations. The separate temporal-cutoff experiment in Appendix C.7 is outside this package's scope.
+This repository provides a reproduction workflow for the main four-domain experiment: Tables 1–3 and Figure 3, together with the paired comparisons and cap ablation in Appendix C. The original document scores are included so these results can be recomputed without retraining or a GPU. A separate workflow includes public-data retrieval, text processing, fixed document splits, GPT-Neo fine-tuning, document scoring, SCF, and the comparator aggregations. The temporal-cutoff experiment in Appendix C.7 is outside this package's scope.
 
 ## Quick reproduction from document scores
 
 Run commands from the repository root. For the quick route, use Python 3.10 or 3.11:
 
 ```bash
+git clone https://github.com/yangliu6768/scf-reproduction.git
+cd scf-reproduction
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
@@ -21,9 +23,9 @@ The supplied `scores/` files contain the original document scores. This route re
 
 ## Reproduction from raw data
 
-The original calculation uses Linux, Python 3.11, PyTorch 2.4.1 with CUDA 12.1, Transformers 4.51.3, and an NVIDIA A100 GPU. Parameters and optimizer state use float32; forward calculations use bfloat16 autocast. A different GPU or software stack may change numerical results.
+The original calculation uses Linux, Python 3.11, PyTorch 2.4.1 with CUDA 12.1, Transformers 4.51.3, and an NVIDIA A100 GPU. Parameters and optimizer state use float32; forward calculations use bfloat16 autocast.
 
-Fixed seeds control random choices but do not guarantee bitwise-identical training across hardware or software environments. Retraining may therefore change document scores and AUROC/TPR/FPR. `verify.py` checks agreement at the paper's printed precision: a mismatch after retraining should be assessed by its magnitude and effect on the method comparisons. The supplied-score route is the reference for reproducing the printed tables exactly.
+Numerical results can differ across GPU models, CUDA/PyTorch versions, and other software environments, even with fixed seeds. Retraining may therefore change document scores and AUROC/TPR/FPR. Use the supplied-score workflow to reproduce the printed tables; `verify.py` checks agreement at their displayed precision.
 
 ```bash
 set -e

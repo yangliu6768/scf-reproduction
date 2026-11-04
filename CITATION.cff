@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: "Please cite the accompanying paper when using this implementation."
+title: "Source-balanced Capped Fisher: Bounded Evidence Aggregation for User Inference in Language Models"
+type: software
+authors:
+  - family-names: Liu
+    given-names: Yang
+  - family-names: Zou
+    given-names: Ran
+  - family-names: Zhu
+    given-names: Wanrong
+repository-code: "https://github.com/yangliu6768/scf-reproduction"
+license: MIT

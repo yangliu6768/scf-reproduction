@@ -3,6 +3,7 @@
 import argparse
 import csv
 from fractions import Fraction
+import json
 from pathlib import Path
 
 import numpy as np
@@ -10,6 +11,7 @@ import numpy as np
 from scf import auc_credits, conformal_ranks, fisher_scores, raw_scores, reference_tail
 
 
+ROOT = Path(__file__).resolve().parent
 DOMAINS = {"reddit": "Reddit", "cc_news": "CC News", "enron": "Enron", "chromium": "Chromium"}
 ALPHAS = np.array([0.0, 0.01, 0.02, 0.05, 0.10])
 LEVELS = [0.05, 0.10, 0.20]
@@ -20,10 +22,14 @@ DECISIONS = [0, 1, 2, 3, 7]
 
 def evaluate(domain, data_dir, output):
     with np.load(data_dir / f"{domain}.npz", allow_pickle=False) as data:
-        values, offsets, labels, orders = (data[k] for k in ["values", "offsets", "labels", "null_order"])
+        values = data["values"]
+    with np.load(ROOT / "splits" / f"{domain}_audit.npz", allow_pickle=False) as audit:
+        offsets, labels, orders = (audit[k] for k in ["offsets", "labels", "null_order"])
+    config = json.loads((ROOT / "config/experiment.json").read_text())
+    domain_config = config["domains"][domain]
     sizes = np.diff(offsets)
     positive, null = np.flatnonzero(labels == 1), np.flatnonzero(labels == 0)
-    k, l = (25, 25) if domain == "enron" else (40, 59)
+    k, l = domain_config["K"], domain_config["L"]
     if offsets[0] != 0 or offsets[-1] != len(values) or len(sizes) != len(labels):
         raise ValueError(f"Invalid source offsets: {domain}")
     if not np.isfinite(values).all() or np.any((sizes < 1) | (sizes > 16)):
@@ -147,7 +153,7 @@ def plot_caps(results, output):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--domain", choices=list(DOMAINS), nargs="+", default=list(DOMAINS))
-    parser.add_argument("--data", type=Path, default=Path(__file__).resolve().parent / "data")
+    parser.add_argument("--data", type=Path, default=Path(__file__).resolve().parent / "scores")
     parser.add_argument("--output", type=Path, default=Path("results"))
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)

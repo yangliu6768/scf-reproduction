@@ -1,0 +1,56 @@
+{
+  "model": "EleutherAI/gpt-neo-125m",
+  "revision": "21def0189f5705e2521767faed922f1f15e7d7db",
+  "epochs": 10,
+  "batch_size": 8,
+  "learning_rate": 5e-05,
+  "warmup_steps": 200,
+  "adam_betas": [
+    0.9,
+    0.999
+  ],
+  "adam_eps": 1e-08,
+  "weight_decay": 0,
+  "domains": {
+    "reddit": {
+      "seed": 20260914,
+      "shuffle": "randperm",
+      "K": 40,
+      "L": 59,
+      "train_documents": 1344,
+      "train_tokens": 62965,
+      "validation_documents": 336,
+      "epoch": 3
+    },
+    "cc_news": {
+      "seed": 171470688381003029,
+      "shuffle": "dataloader",
+      "K": 40,
+      "L": 59,
+      "train_documents": 283370,
+      "train_tokens": 95590331,
+      "validation_documents": 17191,
+      "epoch": 9
+    },
+    "enron": {
+      "seed": 7129716279750356844,
+      "shuffle": "dataloader",
+      "K": 25,
+      "L": 25,
+      "train_documents": 42917,
+      "train_tokens": 10742290,
+      "validation_documents": 2636,
+      "epoch": 5
+    },
+    "chromium": {
+      "seed": 20260914,
+      "shuffle": "randperm",
+      "K": 40,
+      "L": 59,
+      "train_documents": 800,
+      "train_tokens": 84258,
+      "validation_documents": 200,
+      "epoch": 2
+    }
+  }
+}
